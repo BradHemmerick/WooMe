@@ -26,7 +26,7 @@ class Login extends React.Component {
   }
 
   login = async () => {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('1868235313187684', {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('appid', {
         permissions: ['public_profile'],
       });
     if (type === 'success') {
@@ -50,7 +50,7 @@ class Login extends React.Component {
       return (
         <View style={styles.container}>
           <TouchableOpacity onPress={this.login.bind(this)}>
-            <Text>{this.props.loggedIn}</Text>
+            <Text>Login</Text>
           </TouchableOpacity>
         </View>
       )      

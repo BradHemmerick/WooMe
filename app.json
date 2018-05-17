@@ -1,7 +1,7 @@
 {
   "expo": {
     "sdkVersion": "25.0.0",
-    "FacebookAppID":"1868235313187684",
+    "FacebookAppID":"appID",
     "facebookDisplayName": "WooMe"
   }
 }
