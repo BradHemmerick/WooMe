@@ -1,23 +1,62 @@
 import React from 'react';
-import styles from '../styles'
+import styles from '../styles';
+import RootNavigator from '../navigation/RootNavigator';
+import { connect } from 'react-redux';
+import { login } from '../redux/actions';
+import * as firebase from 'firebase';
+import firebaseCofig from '../config/firebase';
+firebase.initializeApp(firebaseCofig);
 
 import { 
   Text, 
-  View
+  View,
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
 class Login extends React.Component {
   state = {}
 
-  componentWillMount() {}
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user != null) {
+        this.setState({ loggedIn: true});
+        console.log('Now Authenticated' + JSON.stringify(user));
+      }
+    });
+  }
+
+  login = async () => {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('appid', {
+      permissions: ['public_profile'],
+    });
+  if (type === 'success') {
+      const credential = await firebase.auth.FacebookAuthProvider.credential(token);
+      
+      firebase.auth().signInWithCredential(credential).catch((error) => {
+        Alert.alert('Try Again')
+      });
+    }
+  }
 
   render() {
-    return (
-     <View>
-      <Text>Login</Text>
-     </View>
-    )
+    if(this.props.loggedIn){
+
+      return (
+        <View styles={styles.container}>
+          <TouchableOpacity onPress={this.login.bind(this)}>
+            <Text>Login</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    }
   }
 }
 
-export default Login;
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.loggedIn
+  };
+}
+
+export default connect(mapStateToProps)(Login);

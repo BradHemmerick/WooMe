@@ -1,5 +1,6 @@
 import React from 'react';
 import RootNavigator from './navigation/RootNavigator';
+import Login from './screens/Login'
 import reducers from './redux/reducers';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
