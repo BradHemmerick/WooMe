@@ -14,13 +14,13 @@ class Home extends React.Component {
 
   componentWillMount() {
 
-  }
+  } 
 
   render() {
     return (
-     <View>
-      <Text>Home</Text>
-     </View>
+      <View>
+        <Text>Home</Text>
+      </View>
     )
   }
 }

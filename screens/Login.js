@@ -1,17 +1,16 @@
 import React from 'react';
-import styles from '../styles';
+import styles from '../styles'
 import RootNavigator from '../navigation/RootNavigator';
 import { connect } from 'react-redux';
-import { login } from '../redux/actions';
+import { login } from '../redux/actions'
 import * as firebase from 'firebase';
-import firebaseCofig from '../config/firebase';
-firebase.initializeApp(firebaseCofig);
+import firebaseConfig from '../config/firebase.js'
+firebase.initializeApp(firebaseConfig);
 
 import { 
   Text, 
   View,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native';
 
 class Login extends React.Component {
@@ -19,36 +18,42 @@ class Login extends React.Component {
 
   componentWillMount() {
     firebase.auth().onAuthStateChanged((user) => {
-      if(user != null) {
-        this.setState({ loggedIn: true});
-        console.log('Now Authenticated' + JSON.stringify(user));
+      if (user != null) {
+        this.props.dispatch(login(true))
+        console.log("We are authenticated now!" + JSON.stringify(user));
       }
     });
   }
 
   login = async () => {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('appid', {
-      permissions: ['public_profile'],
-    });
-  if (type === 'success') {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('1868235313187684', {
+        permissions: ['public_profile'],
+      });
+    if (type === 'success') {
+      // Build Firebase credential with the Facebook access token.
       const credential = await firebase.auth.FacebookAuthProvider.credential(token);
-      
+
+      // Sign in with credential from the Facebook user.
       firebase.auth().signInWithCredential(credential).catch((error) => {
-        Alert.alert('Try Again')
+        // Handle Errors here.
+        Alert.alert("Try Again")
       });
     }
-  }
+  } 
 
   render() {
     if(this.props.loggedIn){
-
       return (
-        <View styles={styles.container}>
+        <RootNavigator/>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
           <TouchableOpacity onPress={this.login.bind(this)}>
-            <Text>Login</Text>
+            <Text>{this.props.loggedIn}</Text>
           </TouchableOpacity>
         </View>
-      )
+      )      
     }
   }
 }
