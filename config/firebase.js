@@ -1,1 +1,1 @@
-// your Firebase info here
+//you firebase nfo

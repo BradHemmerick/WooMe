@@ -19,14 +19,13 @@ class Login extends React.Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
-        this.props.dispatch(login(true))
-        console.log("We are authenticated now!" + JSON.stringify(user));
+        this.props.dispatch(login(user))
       }
     });
   }
 
   login = async () => {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('appid', {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('1868235313187684', {
         permissions: ['public_profile'],
       });
     if (type === 'success') {
@@ -50,7 +49,7 @@ class Login extends React.Component {
       return (
         <View style={styles.container}>
           <TouchableOpacity onPress={this.login.bind(this)}>
-            <Text>Login</Text>
+            <Text>{this.props.loggedIn}</Text>
           </TouchableOpacity>
         </View>
       )      
